@@ -27,6 +27,12 @@ async function handOverPostFile() {
   if (typeof parsed.url !== "string" || parsed.url.length === 0) {
     throw new Error("POST.json must name the post in a url string");
   }
+  const postAddress = /^https:\/\/(www\.|mobile\.)?(x\.com|twitter\.com)\/.+\/status\/\d+/.test(
+    parsed.url,
+  );
+  if (!postAddress) {
+    throw new Error("POST.json url is not an X post address");
+  }
   await mkdir(outDir, { recursive: true });
   await writeFile(join(outDir, "POST.json"), raw, "utf8");
 }
